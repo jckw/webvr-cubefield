@@ -1,0 +1,19 @@
+{
+  "name": "three-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jack Weatherilt",
+  "license": "MIT",
+  "dependencies": {
+    "three": "^0.99.0"
+  },
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --public-url ./"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.2.1",
+    "parcel-bundler": "^1.10.3"
+  }
+}
