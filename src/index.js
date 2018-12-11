@@ -30,6 +30,8 @@ class Scene {
         this.me.userData.speed = 0.01
         this.scene.add(this.me)
 
+        this.tempTilt = 0
+
         // Use as a container
         this.room = new THREE.Object3D()
         this.room.position.y = 1.5
@@ -57,6 +59,8 @@ class Scene {
         container.appendChild(this.renderer.domElement)
 
         window.addEventListener('resize', this.onWindowResize, false)
+        document.addEventListener('keydown', this.onKeydown, false)
+        document.addEventListener('keyup', this.onKeyup, false)
 
         // Related to WebVR on Edge.
         window.addEventListener('vrdisplaypointerrestricted', this.onPointerRestricted, false)
@@ -64,6 +68,24 @@ class Scene {
         document.body.appendChild(WebVR.createButton(this.renderer))
 
         this.animate()
+    }
+
+    onKeydown = e => {
+        if (e.key === 'ArrowLeft') {
+            this.leftPressed = true
+            this.rightPressed = false
+        } else if (e.key === 'ArrowRight') {
+            this.leftPressed = false
+            this.rightPressed = true
+        }
+    }
+
+    onKeyup = e => {
+        if (e.key === 'ArrowLeft') {
+            this.leftPressed = false
+        } else if (e.key === 'ArrowRight') {
+            this.rightPressed = false
+        }
     }
 
     onPointerRestricted = () => {
@@ -97,6 +119,9 @@ class Scene {
         this.renderer.setAnimationLoop(this.render)
     }
 
+    increment = 0.005
+    limit = 0.1
+
     render = () => {
         const delta = this.clock.getDelta() * 60
 
@@ -104,9 +129,20 @@ class Scene {
         this.me.translateZ(-this.me.userData.speed * delta)
         this.me.userData.speed += 0.000001
 
-        // Move left or right depending on head tilt
         const quaternion = this.camera.getWorldQuaternion(new THREE.Quaternion())
+
+        // Move left or right depending on head tilt
         this.me.translateX(-quaternion.z * 0.1)
+
+        // Rotate left or right based on arrow keys
+        let tiltDelta = 0
+        if (this.leftPressed) tiltDelta += this.increment
+        if (this.rightPressed) tiltDelta -= this.increment
+
+        const newTilt = quaternion.z + tiltDelta
+        this.camera.setRotationFromQuaternion(
+            new THREE.Quaternion(0, 0, THREE.Math.clamp(newTilt, -this.limit, +this.limit))
+        )
 
         // Find intersections between crosshairs and camera
         this.raycaster.setFromCamera({ x: 0, y: 0 }, this.camera)
