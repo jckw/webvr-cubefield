@@ -7,7 +7,7 @@ class FloatingCube extends THREE.Mesh {
             new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
         )
 
-        this.setPosition(Math.random() * 8 - 2 + position.x, 0, position.z - 5 - Math.random() * 10)
+        this.setPosition(Math.random() * 8 - 2 + position.x, 0, position.z - 5 - Math.random() * 15)
         this.setVelocity(0, 0, 0)
     }
 

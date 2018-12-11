@@ -44,7 +44,7 @@ class Scene {
         this.scene.add(light)
 
         // Create a bunch of cubes
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 60; i++) {
             const object = new FloatingCube(new THREE.Vector3(0, 0, 0))
             this.room.add(object)
         }
@@ -167,7 +167,7 @@ class Scene {
         const cubesPassed = this.room.children.filter(c => {
             const cWorldPos = c.getWorldPosition(new THREE.Vector3())
 
-            return cWorldPos.distanceTo(myPosition) > 5 && cWorldPos.z > myPosition.z
+            return cWorldPos.distanceTo(myPosition) > 4 && cWorldPos.z > myPosition.z
         })
 
         cubesPassed.map(c => {
